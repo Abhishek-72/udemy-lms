@@ -1,0 +1,1 @@
+npm i bcryptjs cloudinary cors express mongoose dotenv jsonwebtoken multer paypal-rest-sdk
