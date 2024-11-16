@@ -42,7 +42,11 @@ exports.login = async (req, res, next) => {
     const expiryDate = new Date(Date.now() + 3600000);
 
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: expiryDate,
+        secure: true,
+      })
       .status(200)
       .json({
         success: true,

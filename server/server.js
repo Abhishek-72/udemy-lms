@@ -2,7 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoute.js");
+const mediaRouter = require("./routes/mediaRoute.js");
+const instructorCourseRouter = require("./routes/courseRoute.js");
+const verifyToken = require("./utils/verifyUser.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +20,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 //Database Connection
 mongoose
@@ -25,6 +30,8 @@ mongoose
 
 // Routes config
 app.use("/auth", authRouter);
+app.use("/media", mediaRouter);
+app.use("/instructor/course", verifyToken, instructorCourseRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
