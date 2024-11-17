@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoute.js");
 const mediaRouter = require("./routes/mediaRoute.js");
 const instructorCourseRouter = require("./routes/courseRoute.js");
-const verifyToken = require("./utils/verifyUser.js");
+// const verifyToken = require("./utils/verifyUser.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,9 +31,10 @@ mongoose
 // Routes config
 app.use("/auth", authRouter);
 app.use("/media", mediaRouter);
-app.use("/instructor/course", verifyToken, instructorCourseRouter);
+app.use("/instructor/course", instructorCourseRouter);
 
 app.use((err, req, res, next) => {
+  console.error(err.stack);
   const statusCode = err.statusCode || 500;
   const message = err.message || "Something went Wrong !";
   return res.status(statusCode).json({

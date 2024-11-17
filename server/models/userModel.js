@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   userName: {
@@ -16,11 +17,36 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false,
   },
   role: {
     type: String,
-    default: "user",
+    required: true,
+  },
+  passwordChangedAt: {
+    type: Date,
   },
 });
+
+//comparing pass
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// checking if password is changed after generating token or not.
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp; // tokentimestamp must be less than password changedtime
+  }
+  return false;
+};
 
 module.exports = mongoose.model("user", userSchema);

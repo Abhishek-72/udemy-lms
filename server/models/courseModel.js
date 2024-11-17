@@ -35,6 +35,10 @@ const courseSchema = new mongoose.Schema(
     ],
     ciriculam: [lectureSchema],
     isPublished: { type: Boolean, default: false },
+    userRef: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true } // Adds createdAt and updatedAt fields
 );
