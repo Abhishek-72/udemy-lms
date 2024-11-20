@@ -17,12 +17,19 @@ exports.addNewCourse = async (req, res, next) => {
   }
 };
 
-exports.getAllCourses = async (req, res, next) => {
+exports.getMyAllCourses = async (req, res, next) => {
   try {
-    const courseList = await Course.find({});
+    const userId = req.user.id;
+    const courses = await Course.find({ userRef: userId });
+    if (!courses || courses === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No courses found for this user !",
+      });
+    }
     res.status(200).json({
       success: true,
-      data: courseList,
+      data: courses,
     });
   } catch (error) {
     next(error);

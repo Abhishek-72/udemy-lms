@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoute.js");
 const mediaRouter = require("./routes/mediaRoute.js");
 const instructorCourseRouter = require("./routes/courseRoute.js");
+const userRoute = require("./routes/userRoute.js");
 // const verifyToken = require("./utils/verifyUser.js");
 
 const app = express();
@@ -30,6 +31,7 @@ mongoose
 
 // Routes config
 app.use("/auth", authRouter);
+app.use("/user", userRoute);
 app.use("/media", mediaRouter);
 app.use("/instructor/course", instructorCourseRouter);
 

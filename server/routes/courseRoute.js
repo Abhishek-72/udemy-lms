@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   addNewCourse,
-  getAllCourses,
+  getMyAllCourses,
   getCourseDetailsById,
   updateCourseById,
 } = require("../controllers/courseController.js");
@@ -9,8 +9,8 @@ const { protect } = require("../controllers/authController.js");
 const { isInstructor } = require("../controllers/roleController.js");
 const router = express.Router();
 
-router.post("/create", isInstructor, addNewCourse);
-router.get("/get", protect, isInstructor, getAllCourses);
+router.post("/create", protect, isInstructor, addNewCourse);
+router.get("/get", protect, isInstructor, getMyAllCourses);
 router.get("/get/details/:id", protect, isInstructor, getCourseDetailsById);
 router.put("/update/:id", protect, isInstructor, updateCourseById);
 
