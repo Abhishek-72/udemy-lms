@@ -71,7 +71,7 @@ exports.resetPassword = async (req, res, next) => {
       message: "Token is Invalid or expired.",
     });
   }
-  user.password = await bcrypt.hash(req.body.password, 10);
+  user.password = req.body.password;
   user.passwordResetExpires = undefined;
   user.passwordResetToken = undefined;
   await user.save();
@@ -81,6 +81,31 @@ exports.resetPassword = async (req, res, next) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   res.status(200).json({
     success: true,
+    token,
+  });
+  next();
+};
+
+// update user password
+exports.updatePassword = async (req, res, next) => {
+  //Get user from collection
+  const user = await User.findById(req.user.id).select("+password");
+
+  // check posted password from user is correct
+  if (!(await user.correctPassword(req.body.currentPassword, user.password))) {
+    return res.status(401).json({
+      success: false,
+      message: "You current password is wrong !",
+    });
+  }
+  //if current password is correct then update password
+  user.password = req.body.password;
+  await user.save();
+  //4) Log the user In send JWt
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  res.status(200).json({
+    success: true,
+    message: "Password changed Successfully !",
     token,
   });
   next();

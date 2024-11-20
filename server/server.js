@@ -10,7 +10,6 @@ const userRoute = require("./routes/userRoute.js");
 // const verifyToken = require("./utils/verifyUser.js");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 app.use(
@@ -45,6 +44,7 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT} !`);
