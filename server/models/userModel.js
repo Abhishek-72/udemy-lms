@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 //comparing pass
@@ -74,5 +79,10 @@ userSchema.methods.createPasswordResetToken = function () {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
+
+//using query to makke user disapper or delete or inactive them::
+userSchema.pre(/find^/, function (next) {
+  this.find({ active: { $ne: false } });
+});
 
 module.exports = mongoose.model("user", userSchema);

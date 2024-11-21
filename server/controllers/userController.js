@@ -145,3 +145,13 @@ exports.updateMe = async (req, res, next) => {
   });
   next();
 };
+
+exports.deleteMe = async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+
+  res.status(204).json({
+    success: true,
+    data: null,
+    message: "user deleted successfully",
+  });
+};

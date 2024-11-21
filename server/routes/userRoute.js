@@ -4,6 +4,7 @@ const {
   resetPassword,
   updatePassword,
   updateMe,
+  deleteMe,
 } = require("../controllers/userController.js");
 const { protect } = require("../controllers/authController.js");
 
@@ -12,5 +13,6 @@ router.post("/forgotPassword", protect, forgotPassword);
 router.patch("/resetPassword/:token", protect, resetPassword);
 router.patch("/updatePassword", protect, updatePassword);
 router.patch("/updateMe", protect, updateMe);
+router.delete("/deleteMe", protect, deleteMe);
 
 module.exports = router;

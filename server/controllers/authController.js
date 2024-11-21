@@ -22,13 +22,19 @@ exports.registerUser = async (req, res, next) => {
       role,
     });
     await newUser.save();
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "120m",
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+    res.cookie("jwt", token, {
+      expires: new Date(
+        Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      ),
+
+      httpOnly: true,
     });
-    return res.status(201).json({
+    newUser.password = undefined;
+    res.status(201).json({
       success: true,
       message: "User registered Successfully !",
-      token,
+
       data: {
         user: newUser,
       },
