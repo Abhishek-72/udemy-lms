@@ -63,12 +63,13 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.pre("save", async function (next) {
-  // only run this when password was actully modified
-  if (!this.isModified("password")) return next();
-  //if pass is modified
-  this.password = await bcrypt.hash(this.password, 10);
+  // Hash the password if it's new or modified
+  if (this.isNew || this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
   next();
 });
+
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
   this.passwordResetToken = crypto

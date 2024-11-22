@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const User = require("../models/userModel");
 const sendEmail = require("../utils/email.js");
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const filterObj = (obj, ...allowedFields) => {
