@@ -20,7 +20,7 @@ exports.addNewCourse = async (req, res, next) => {
 exports.getMyAllCourses = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const courses = await Course.find({ userRef: userId });
+    const courses = await Course.findOne({ userRef: userId });
     if (!courses || courses === 0) {
       return res.status(404).json({
         success: false,

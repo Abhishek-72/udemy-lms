@@ -8,8 +8,16 @@ const mediaRouter = require("./routes/mediaRoute.js");
 const instructorCourseRouter = require("./routes/courseRoute.js");
 const userRoute = require("./routes/userRoute.js");
 // const verifyToken = require("./utils/verifyUser.js");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
+// Global middleware
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many request from this IP. please try again in an hour !",
+});
+app.use("/api", limiter);
 const MONGO_URI = process.env.MONGO_URI;
 
 app.use(
@@ -29,10 +37,10 @@ mongoose
   .catch((e) => console.log(e));
 
 // Routes config
-app.use("/auth", authRouter);
-app.use("/user", userRoute);
-app.use("/media", mediaRouter);
-app.use("/instructor/course", instructorCourseRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRoute);
+app.use("/api/media", mediaRouter);
+app.use("/api/instructor/course", instructorCourseRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

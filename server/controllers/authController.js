@@ -80,7 +80,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {});
 
     // Set secure cookie
     res.cookie("jwt", token, {
